@@ -29,7 +29,7 @@ processing_complete = False
 def read_root(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
-@app.get("/upload/")
+@app.get("/upload")
 def redirect_to_home():
     return FileResponse("tempAPI/index.html")
 
@@ -37,7 +37,7 @@ def redirect_to_home():
 def test_endpoint():
     return {"message": "Test successful"}
 
-@app.post("/upload/")
+@app.post("/upload")
 async def upload_files(
     request: Request,
     files: List[UploadFile] = File(...),
