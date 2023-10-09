@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="69233132-2e3a-49ec-8140-4f48bcbc571b" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/DataScience.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/DataScience.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/csv-editor.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AbsHumSepPlots.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AbsHumidty.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CT_Rec.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cow.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Datasci.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DynaAbsHum.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GeekStaticCodeChallenge_JB.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GeekStaticCodeChallenge_JB/Geekstatic_.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GeekStaticCodeChallenge_JB/letterValues.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GeekStaticCodeChallenge_JB/wordlist.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GeekTest.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Geekstatic.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Music.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/challenge.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/earshells.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/highscoringwords.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image1.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image2.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sphericalCow.py" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="2WWVZespIwlXxVWFhSSJYAddQ0O" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="69233132-2e3a-49ec-8140-4f48bcbc571b" name="Changes" comment="" />
+      <created>1696848380404</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1696848380404</updated>
+    </task>
+    <servers />
+  </component>
+</project>
