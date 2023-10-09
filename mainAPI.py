@@ -28,6 +28,10 @@ def read_root(request: Request):
 def redirect_to_home():
     return fastapi.responses.RedirectResponse("/")
 
+@app.get("/test/")
+def test_endpoint():
+    return {"message": "Test successful"}
+
 
 @app.post("/upload/")
 async def upload_files(request: Request, files: List[UploadFile] = File(...), plot_option: str = Form("combined"), dpi: int = Form(500), timestamp_count: int = Form(10),
