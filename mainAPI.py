@@ -14,11 +14,16 @@ from AFM import (
 
 app = FastAPI()
 
+
+
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="tempAPI")
 
 # Define these variables globally to store their values
 temp_min = temp_max = relH_min = relH_max = None
+# Add this flag at the top of your code
+processing_complete = False
+
 
 @app.get("/")
 def read_root(request: Request):
@@ -42,7 +47,7 @@ async def upload_files(
     temp_range: str = Form("10,30"),
     relH_range: str = Form("25,70")
 ):
-    global temp_min, temp_max, relH_min, relH_max
+    global temp_min, temp_max, relH_min, relH_max, processing_complete
 
     if plot_option == "combined" and len(files) == 1:
         error_message = "For the 'combined' option, you need to upload more than one file."
@@ -64,10 +69,15 @@ async def upload_files(
     temp_min, temp_max = map(int, temp_range.split(','))
     relH_min, relH_max = map(int, relH_range.split(','))
 
+
+
     # Move this outside the loop to avoid processing the same data multiple times
     clean_and_process_excel_files(temp_files, expected_header_names, unwanted_header_elements, dpi, timestamp_count,
         combined_plot=plot_option == "combined", temp_range=(temp_min, temp_max),
         relH_range=(relH_min, relH_max))
+
+    # Set the processing_complete flag to True
+    processing_complete = True
 
     if plot_option == "combined":
         file_path = os.path.join("static", "Plots.png")
@@ -78,8 +88,25 @@ async def upload_files(
         return FileResponse(os.path.join(temp_dir, "plots.zip"),
                             headers={"Content-Disposition": "attachment; filename=plots.zip"})
 
-# The /upload/result endpoint should be corrected as well, but it's commented out in your code.
+# Define the /upload/result endpoint to return processing results
+@app.get("/upload/result")
+def get_upload_result():
+    global temp_min, temp_max, relH_min, relH_max, processing_complete
 
+    # Check if processing is complete
+    if not processing_complete:
+        return {"message": "Processing is not yet complete. Please wait."}
+
+    # If processing is complete, return the results
+    result_data = {
+        "temp_min": temp_min,
+        "temp_max": temp_max,
+        "relH_min": relH_min,
+        "relH_max": relH_max,
+        # Add other result data here as needed
+    }
+
+    return result_data
 if __name__ == "__main__":
     import uvicorn
 
