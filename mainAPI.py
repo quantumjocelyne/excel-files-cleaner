@@ -25,11 +25,11 @@ templates = Jinja2Templates(directory="tempAPI")
 
 # Define these variables globally to store their values
 temp_min = temp_max = relH_min = relH_max = None
-# Add this flag at the top of your code
+# Flag
 processing_complete = False
 
 
-# Clear temporary files folders: this function will remove all .png files in the static and temp_files folder
+# Clear temporary files folders: these functions will remove all .png files in the static and temp_files folder
 # after serving the plots
 
 def clear_static_folder():
@@ -103,21 +103,22 @@ async def upload_files(
             shutil.copyfileobj(file.file, buffer)
         temp_files.append(temp_file)
 
-    # Split the ranges and convert them to integers
+    # Split ranges and convert them to integers
     temp_min, temp_max = map(int, temp_range.split(','))
     relH_min, relH_max = map(int, relH_range.split(','))
 
 
 
-    # Move this outside the loop to avoid processing the same data multiple times
+    # Outside the loop to avoid processing the same data multiple times
+
     clean_and_process_excel_files(temp_files, expected_header_names, unwanted_header_elements, dpi, timestamp_count,
         combined_plot=plot_option == "combined", temp_range=(temp_min, temp_max),
         relH_range=(relH_min, relH_max))
 
-    # After calling clean_and_process_excel_files
+
     print(os.listdir(temp_dir))
 
-    # Set the processing_complete flag to True
+
     processing_complete = True
 
     if plot_option == "combined":
@@ -128,13 +129,16 @@ async def upload_files(
         # Get a list of all the plot files
         plot_files = glob.glob(os.path.join("static", "*_plot.png"))
 
-        # If there's only one plot file, serve it directly instead of zipping it
+        # If uploaded file is only 1, then serve it directly instead of zipping it
+
         if len(plot_files) == 1:
             file_path = plot_files[0]
             response = FileResponse(file_path, headers={
                 "Content-Disposition": f"attachment; filename={os.path.basename(file_path)}"})
         elif plot_files:
+
             # Create a temporary ZIP file on disk
+
             zip_file_path = os.path.join("static", "plots.zip")
             with zipfile.ZipFile(zip_file_path, 'w', zipfile.ZIP_DEFLATED) as zip_file:
                 for file_path in plot_files:
@@ -150,21 +154,24 @@ async def upload_files(
 
 
 # Define the /upload/result endpoint to return processing results
+
 @app.get("/upload/result")
 def get_upload_result():
     global temp_min, temp_max, relH_min, relH_max, processing_complete
 
     # Check if processing is complete
+
     if not processing_complete:
         return {"message": "Processing is not yet complete. Please wait."}
 
     # If processing is complete, return the results
+
     result_data = {
         "temp_min": temp_min,
         "temp_max": temp_max,
         "relH_min": relH_min,
         "relH_max": relH_max,
-        # Add other result data here as needed
+
     }
 
     return result_data

@@ -37,7 +37,7 @@ def clean_and_process_excel_files(files, expected_header_names, unwanted_header_
         num_cols = 2
         num_rows = (num_files + 1) // num_cols
 
-        # Dynamic figure height: based on the number of files
+        # Dynamic figure height: based on the number of files uploaded
         single_height = 5  # Optimal height of a single plot
         fig_height = single_height * num_rows
         fig, axs = plt.subplots(num_rows, num_cols, figsize=(15, fig_height))
@@ -82,7 +82,7 @@ def clean_and_process_excel_files(files, expected_header_names, unwanted_header_
                 ax_left.plot(df["Datum/Uhrzeit"], df[temp_header], color='red', linewidth=0.6)
                 ax_right.plot(df["Datum/Uhrzeit"], df[rh_header], color='blue', linewidth=0.6)
 
-                # Display the timestamps on the x-axis
+                # Display the timestamps on the x-axis (with default valie that can be customised later)
                 num_ticks = 10
                 ticks = df["Datum/Uhrzeit"].iloc[::len(df) // timestamp_count].values
                 ax_left.set_xticks(ticks)
@@ -145,7 +145,8 @@ def clean_and_process_excel_files(files, expected_header_names, unwanted_header_
 
 # Define the expected header names to match
 expected_header_names = ["Datum/Uhrzeit", "Temperatur[°C]", "rel.Luftfeuchte[%rF]", "Lufttemperatur[°C]", "%Feuchtigkeit[%rF]"]
-# Define the unwanted header elements
+# Define the unwanted header elements to ignore
 unwanted_header_elements = ["Temperatur [°C]", "rel.Luftfeuchte [%rF]", "Lufttemperatur [°C]", "%Feuchtigkeit [%rF]"]
 
-#clean_and_process_excel_files("C:\\Users\Bisagny\OneDrive\Documents\Corak AG\Datenlogger", expected_header_names, unwanted_header_elements, combined_plot=False)
+# Call if run locally:
+# clean_and_process_excel_files("your file's path here", expected_header_names, unwanted_header_elements, combined_plot=False)
