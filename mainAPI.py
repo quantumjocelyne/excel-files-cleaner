@@ -1,11 +1,16 @@
+import glob
 import os
+import io
 import shutil
+import zipfile
+import time
+from fastapi import BackgroundTasks
 from typing import List
 from fastapi import FastAPI, UploadFile, File, Form
 from starlette.requests import Request
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
-from starlette.responses import FileResponse
+from starlette.responses import FileResponse, StreamingResponse
 from AFM import (
     clean_and_process_excel_files,
     expected_header_names,
@@ -15,7 +20,6 @@ from AFM import (
 app = FastAPI()
 
 
-
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="tempAPI")
 
@@ -23,6 +27,37 @@ templates = Jinja2Templates(directory="tempAPI")
 temp_min = temp_max = relH_min = relH_max = None
 # Add this flag at the top of your code
 processing_complete = False
+
+
+# This function will remove all .png files in the static and temp_files folder
+def clear_static_folder():
+    for file_name in os.listdir("static"):
+        if file_name.endswith(".png"):
+            file_path = os.path.join("static", file_name)
+            try:
+                os.remove(file_path)
+                print(f"Successfully removed {file_path}")
+            except Exception as e:
+                print(f"Error removing {file_path}: {e}")
+
+def clear_temp_files_contents():
+    folder = "temp_files"
+    for filename in os.listdir(folder):
+        file_path = os.path.join(folder, filename)
+        try:
+            if os.path.isfile(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path):
+                shutil.rmtree(file_path)
+        except Exception as e:
+            print(f"Failed to delete {file_path}. Reason: {e}")
+
+def delayed_cleanup():
+    time.sleep(10)  # wait for 10 seconds
+    clear_static_folder()
+    if os.path.exists("temp_files"):
+        shutil.rmtree("temp_files")
+
 
 
 @app.get("/")
@@ -39,6 +74,7 @@ def test_endpoint():
 
 @app.post("/upload")
 async def upload_files(
+    background_tasks: BackgroundTasks,
     request: Request,
     files: List[UploadFile] = File(...),
     plot_option: str = Form("combined"),
@@ -76,17 +112,40 @@ async def upload_files(
         combined_plot=plot_option == "combined", temp_range=(temp_min, temp_max),
         relH_range=(relH_min, relH_max))
 
+    # After calling clean_and_process_excel_files
+    print(os.listdir(temp_dir))
+
     # Set the processing_complete flag to True
     processing_complete = True
 
     if plot_option == "combined":
         file_path = os.path.join("static", "Plots.png")
-        return FileResponse(file_path, headers={"Content-Disposition": "attachment; filename=Plots.png"})
+        response = FileResponse(file_path, headers={"Content-Disposition": "attachment; filename=Plots.png"})
+        #return response
     else:
-        # Zip all the individual plot files and serve
-        shutil.make_archive(os.path.join(temp_dir, "plots"), 'zip', temp_dir)
-        return FileResponse(os.path.join(temp_dir, "plots.zip"),
-                            headers={"Content-Disposition": "attachment; filename=plots.zip"})
+        # Get a list of all the plot files
+        plot_files = glob.glob(os.path.join("static", "*_plot.png"))
+
+        # If there's only one plot file, serve it directly instead of zipping it
+        if len(plot_files) == 1:
+            file_path = plot_files[0]
+            response = FileResponse(file_path, headers={
+                "Content-Disposition": f"attachment; filename={os.path.basename(file_path)}"})
+        elif plot_files:
+            # Create a temporary ZIP file on disk
+            zip_file_path = os.path.join("static", "plots.zip")
+            with zipfile.ZipFile(zip_file_path, 'w', zipfile.ZIP_DEFLATED) as zip_file:
+                for file_path in plot_files:
+                    zip_file.write(file_path, os.path.basename(file_path))
+            response = FileResponse(zip_file_path, headers={"Content-Disposition": "attachment; filename=plots.zip"})
+        else:
+            return {"error": "No plot files found to be zipped"}
+
+    background_tasks.add_task(clear_static_folder)
+    background_tasks.add_task(clear_temp_files_contents)
+
+    return response
+
 
 # Define the /upload/result endpoint to return processing results
 @app.get("/upload/result")
@@ -107,6 +166,7 @@ def get_upload_result():
     }
 
     return result_data
+
 if __name__ == "__main__":
     import uvicorn
 

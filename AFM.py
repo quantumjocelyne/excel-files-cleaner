@@ -62,7 +62,7 @@ def clean_and_process_excel_files(files, expected_header_names, unwanted_header_
                     ax_left = axs[i]
 
                 else:
-                    row = i // num_cols
+                    row = i //num_cols
                     col = i % num_cols
                     ax_left = axs[row, col]
             else:
@@ -126,7 +126,7 @@ def clean_and_process_excel_files(files, expected_header_names, unwanted_header_
                     plt.tight_layout()
                     plt.savefig(save_path_individual, dpi=dpi, bbox_inches='tight')
                     print(f"Figure saved to {save_path_individual}")
-                    plt.close(fig)
+
 
             else:
                 print(f"Temperature and/or relative humidity headers not found in {file}.")
