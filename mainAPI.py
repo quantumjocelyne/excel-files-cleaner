@@ -29,10 +29,12 @@ temp_min = temp_max = relH_min = relH_max = None
 processing_complete = False
 
 
-# This function will remove all .png files in the static and temp_files folder
+# Clear temporary files folders: this function will remove all .png files in the static and temp_files folder
+# after serving the plots
+
 def clear_static_folder():
     for file_name in os.listdir("static"):
-        if file_name.endswith(".png"):
+        if file_name.endswith(".png") or file_name.endswith(".zip"):
             file_path = os.path.join("static", file_name)
             try:
                 os.remove(file_path)
